@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var PlayerScene = load("res://player.tscn")
 @onready var BallScene = load("res://ball.tscn")
-
+# 192.168.1.167
 @onready var IP_ADDRESS = $Menu/Address.text
 var PORT = 7000
 var players = {}
@@ -50,6 +50,7 @@ func _on_join_pressed():
 func _on_start_pressed():
 	var direction = Vector2(randi_range(-500,500), randi_range(-500,500)) 
 	start.rpc(players, direction)
+	$Timer.start()
 
 @rpc("call_local")
 func start(nplayers, direction):
@@ -93,3 +94,19 @@ func _on_test_pressed():
 @rpc
 func test():
 	print("Hi everyone")
+
+
+func _on_timer_timeout():
+	var direction = Vector2(randi_range(-500,500), randi_range(-500,500))
+	spawn_ball.rpc(direction)
+	
+@rpc("call_local")
+func spawn_ball(direction):
+	var ball = BallScene.instantiate()
+	ball.position = Vector2(380,380)
+	if direction.length() == 0:
+		ball.velocity = Vector2(0,300)
+	else:
+		ball.velocity = direction/direction.length() * 300
+	add_child(ball)
+	
