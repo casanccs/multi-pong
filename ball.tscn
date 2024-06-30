@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://vke1ufbe123q"]
+
+[ext_resource type="Script" path="res://ball.gd" id="1_dcbd6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j4i1c"]
+size = Vector2(40, 40)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_61ts5"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="ball" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_dcbd6")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.693676, 0, 0.151906, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(20, 20)
+shape = SubResource("RectangleShape2D_j4i1c")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_61ts5")
